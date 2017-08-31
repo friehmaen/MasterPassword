@@ -4,6 +4,7 @@ matrix:
       language: c
     - os: linux
       language: java
+      script: cd ./gradle && ./gradlew build
     - os: osx
       language: objective-c
       osx_image: xcode8.3
