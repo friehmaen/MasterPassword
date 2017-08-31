@@ -2,6 +2,8 @@ matrix:
   include:
     - os: linux
       language: c
+    - os: linux
+      language: java
     - os: osx
       language: objective-c
       osx_image: xcode8.3
