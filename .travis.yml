@@ -10,11 +10,19 @@ matrix:
 git:
   submodules: true
 
+env:
+  - targets='mpw mpw-bench mpw-tests'
+
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libsodium json-c; fi
 
 script:
-  - "( cd ./platform-independent/cli-c && ./clean && targets='mpw mpw-bench mpw-tests' ./build && ./mpw-tests && ./mpw-cli-tests )"
+  - cd ./platform-independent/cli-c 
+  - ./clean  
+  - ./build 
+  - ./mpw-tests 
+  - ./mpw-cli-tests
+  - cd
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword iOS' -sdk iphonesimulator )"; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword macOS' )";fi
