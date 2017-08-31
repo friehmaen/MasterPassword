@@ -1,12 +1,11 @@
-language: objective-c
-
-os:
- - osx
- - linux
-
-osx_image: xcode8.3
-
-env: TERM=dumb SHLVL=0
+matrix:
+  include:
+    - os: linux
+      language: c
+    - os: osx
+      language: objective-c
+      osx_image: xcode8.3
+      env: TERM=dumb SHLVL=0
 
 git:
   submodules: true
