@@ -1,13 +1,25 @@
+language: generic
+
 matrix:
   include:
     - os: linux
       language: c
+      script:
+        - cd ./platform-independent/cli-c && ./clean && ./build && ./mpw-tests && ./mpw-cli-tests
+
     - os: linux
-      language: java
-      script: cd ./gradle && ./gradlew build
+      language: android
+      script: 
+        - cd ./gradle && ./gradlew build
+
     - os: osx
       language: objective-c
       osx_image: xcode8.3
+      script:
+        - cd ./platform-independent/cli-c && ./clean && targets='mpw mpw-bench mpw-tests' ./build && ./mpw-tests && ./mpw-cli-tests
+        - cd
+        - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword iOS' -sdk iphonesimulator )"
+        - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword macOS' )"
 
 git:
   submodules: true
@@ -18,13 +30,5 @@ env:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libsodium json-c; fi
-
-script:
-  - cd ./platform-independent/cli-c 
-  - ./clean  
-  - ./build 
-  - ./mpw-tests 
-  - ./mpw-cli-tests
-  - cd
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword iOS' -sdk iphonesimulator )"; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword macOS' )";fi
+  
+script: ./mpw -h
